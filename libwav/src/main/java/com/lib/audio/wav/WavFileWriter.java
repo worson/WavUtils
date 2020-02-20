@@ -16,6 +16,9 @@ public class WavFileWriter {
     private int mDataSize = 0;
     private DataOutputStream mDataOutputStream;
 
+    public boolean openFile(String filepath, WavHeader header) throws IOException{
+        return openFile(filepath, header.getSampleRate(),header.getNumChannel(),header.getBitsPerSample());
+    }
     public boolean openFile(String filepath, int sampleRateInHz, int channels, int bitsPerSample) throws IOException {
         if (mDataOutputStream != null) {
             closeFile();

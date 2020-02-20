@@ -90,8 +90,12 @@ public class WavHeader {
         return mSubChunk2Size;
     }
 
-    public int getDataSize() {
+    public int getDataByteSize() {
         return getSubChunk2Size();
+    }
+
+    public int getDuration(){
+        return (int)(1000*8.0* getDataByteSize()/(getSampleRate()*getBitsPerSample()*getNumChannel()));
     }
 
     @Override
