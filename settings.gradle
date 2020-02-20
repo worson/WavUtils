@@ -1,0 +1,2 @@
+include ':app', ':libwav'
+rootProject.name='WavUtils'
