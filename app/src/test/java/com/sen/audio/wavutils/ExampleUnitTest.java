@@ -1,4 +1,4 @@
-package com.sen.audio.wavutils;
+package com.app.audio.wavutils;
 
 import org.junit.Test;
 

@@ -1,18 +1,18 @@
-package com.sen.audio.wavutils;
+package com.app.audio.wavutils;
 
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.app.audio.wavutils.play.NativePlayer;
 import com.lib.audio.wav.PcmUtil;
 import com.lib.audio.wav.WavFileWriter;
 import com.lib.audio.wav.WavHeader;
 import com.lib.audio.wav.WavUtil;
-import com.sen.audio.wavutils.play.NativePlayer;
-import com.sen.audio.wavutils.utils.AILog;
-import com.sen.audio.wavutils.utils.AssetsUtil;
-import com.sen.audio.wavutils.utils.GlobalContext;
+import com.lib.common.androidbase.global.GlobalContext;
+import com.lib.common.androidbase.resource.AssetsUtil;
+import com.lib.common.dlog.DLog;
 import java.io.File;
 import java.io.IOException;
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 long cutDuration=WavUtil.cutWavTail(mCutWavFilePath,mCutWavFilePath,CUT_DURATION);
                 showWavInfo("裁剪后音频",mCutWavFilePath);
-                AILog.i(TAG, "onClick: cutWavTail "+cutDuration);
+                DLog.i(TAG, "onClick: cutWavTail "+cutDuration);
             }
         });
 

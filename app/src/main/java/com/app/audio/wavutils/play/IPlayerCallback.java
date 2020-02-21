@@ -1,4 +1,4 @@
-package com.sen.audio.wavutils.play;
+package com.app.audio.wavutils.play;
 
 public interface IPlayerCallback {
 
