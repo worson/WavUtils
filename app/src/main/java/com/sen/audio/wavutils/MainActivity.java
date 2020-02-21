@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.lib.audio.wav.PcmUtil;
 import com.lib.audio.wav.WavFileWriter;
 import com.lib.audio.wav.WavHeader;
 import com.lib.audio.wav.WavUtil;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int mLastPlayId=-1;
     private String mWavFilePath;
+    private String mPcmFilePath;
     private String mCutWavFilePath;
 
     @Override
@@ -37,11 +39,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         mWavFilePath=GlobalContext.get().getFilesDir().getPath()+"/test.wav";
+        mPcmFilePath=GlobalContext.get().getFilesDir().getPath()+"/test.pcm";
         mCutWavFilePath=GlobalContext.get().getFilesDir().getPath()+"/test_cut.wav";
         if (!new File(mWavFilePath).exists()) {
             AssetsUtil.copyFile(GlobalContext.get(),"test.wav",mWavFilePath);
         }
-
+        if (!new File(mPcmFilePath).exists()) {
+            AssetsUtil.copyFile(GlobalContext.get(),new File(mPcmFilePath).getName(),mPcmFilePath);
+        }
         tv_content=findViewById(R.id.tv_content);
 
         findViewById(R.id.bt_media_play).setOnClickListener(new OnClickListener() {
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_cut_wav).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                long cutDuration=WavUtil.cutWavTail(mWavFilePath,mCutWavFilePath,CUT_DURATION);
+                long cutDuration=WavUtil.cutWavTail(mCutWavFilePath,mCutWavFilePath,CUT_DURATION);
                 showWavInfo("裁剪后音频",mCutWavFilePath);
                 AILog.i(TAG, "onClick: cutWavTail "+cutDuration);
             }
@@ -84,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createSilentWav(GlobalContext.get().getFilesDir().getPath()+"/test_silent.wav",CUT_DURATION);
+            }
+        });
+
+        findViewById(R.id.bt_wrap_pcm).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PcmUtil.toWav(mPcmFilePath,GlobalContext.get().getFilesDir().getPath()+"/test_pcm.wav");
+                showWavInfo("Pcm转换音频",GlobalContext.get().getFilesDir().getPath()+"/test_pcm.wav");
             }
         });
 

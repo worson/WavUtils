@@ -1,7 +1,9 @@
 package com.lib.audio.wav;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 说明:
@@ -10,7 +12,7 @@ import java.io.IOException;
  */
 public class WavUtil {
 
-    private final static String TAG = "WavUtil";
+
 
     /**
      * 获取wav文件文件信息
