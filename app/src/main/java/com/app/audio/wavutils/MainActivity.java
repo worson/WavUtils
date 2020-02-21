@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.app.audio.wavutils.play.NativePlayer;
+import com.lib.audio.player.NativePlayer;
 import com.lib.audio.wav.PcmUtil;
 import com.lib.audio.wav.WavFileWriter;
 import com.lib.audio.wav.WavHeader;
