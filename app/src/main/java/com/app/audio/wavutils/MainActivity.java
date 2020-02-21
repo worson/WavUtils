@@ -12,7 +12,9 @@ import com.lib.audio.wav.WavHeader;
 import com.lib.audio.wav.WavUtil;
 import com.lib.common.androidbase.global.GlobalContext;
 import com.lib.common.androidbase.resource.AssetsUtil;
+import com.lib.common.androidbase.utils.ToastUtil;
 import com.lib.common.dlog.DLog;
+import com.lib.common.io.string.Strings;
 import java.io.File;
 import java.io.IOException;
 
@@ -26,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     private int mLastPlayId=-1;
     private String mWavFilePath;
-    private String mPcmFilePath;
+    private File mPcmFile;
     private String mCutWavFilePath;
+    private String mCurrentAudioFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         mWavFilePath=GlobalContext.get().getFilesDir().getPath()+"/test.wav";
-        mPcmFilePath=GlobalContext.get().getFilesDir().getPath()+"/test.pcm";
+        mPcmFile =new File(GlobalContext.get().getFilesDir().getPath()+"/test.pcm");
         mCutWavFilePath=GlobalContext.get().getFilesDir().getPath()+"/test_cut.wav";
         if (!new File(mWavFilePath).exists()) {
             AssetsUtil.copyFile(GlobalContext.get(),"test.wav",mWavFilePath);
         }
-        if (!new File(mPcmFilePath).exists()) {
-            AssetsUtil.copyFile(GlobalContext.get(),new File(mPcmFilePath).getName(),mPcmFilePath);
+        if (!mPcmFile.exists()) {
+            AssetsUtil.copyFile(GlobalContext.get(),mPcmFile.getName(), mPcmFile.getPath());
         }
         tv_content=findViewById(R.id.tv_content);
 
@@ -60,17 +63,23 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_cut_wav).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                long cutDuration=WavUtil.cutWavTail(mCutWavFilePath,mCutWavFilePath,CUT_DURATION);
+                long cutDuration=WavUtil.cutWavTail(mWavFilePath,mCutWavFilePath,CUT_DURATION);
                 showWavInfo("裁剪后音频",mCutWavFilePath);
+                mCurrentAudioFilePath=mCutWavFilePath;
                 DLog.i(TAG, "onClick: cutWavTail "+cutDuration);
             }
         });
 
-        findViewById(R.id.bt_cut_wav_play).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.bt_current_wav_play).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                NativePlayer.getInstance().cancel(mLastPlayId);
-                mLastPlayId=NativePlayer.getInstance().play(new File(mCutWavFilePath),null);
+                if (Strings.notEmpty(mCurrentAudioFilePath)) {
+                    NativePlayer.getInstance().cancel(mLastPlayId);
+                    mLastPlayId=NativePlayer.getInstance().play(new File(mCurrentAudioFilePath),null);
+                }else {
+                    ToastUtil.longToast("当前无处理过的音频");
+                }
+
             }
         });
 
@@ -89,14 +98,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createSilentWav(GlobalContext.get().getFilesDir().getPath()+"/test_silent.wav",CUT_DURATION);
+                mCurrentAudioFilePath=GlobalContext.get().getFilesDir().getPath()+"/test_silent.wav";
             }
         });
 
         findViewById(R.id.bt_wrap_pcm).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                PcmUtil.toWav(mPcmFilePath,GlobalContext.get().getFilesDir().getPath()+"/test_pcm.wav");
-                showWavInfo("Pcm转换音频",GlobalContext.get().getFilesDir().getPath()+"/test_pcm.wav");
+                String newFilePath=GlobalContext.get().getFilesDir().getPath()+"/test_pcm.wav";
+                PcmUtil.toWav(mPcmFile.getAbsolutePath(),newFilePath,new WavHeader(16000,1,16));
+                showWavInfo("Pcm转换音频",newFilePath);
+                mCurrentAudioFilePath=newFilePath;
+                DLog.i(TAG, "onClick: pcm转换后的音频为 "+newFilePath);
             }
         });
 
