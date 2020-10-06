@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 createSilentWav(GlobalContext.get().getFilesDir().getPath()+"/test_silent.wav",CUT_DURATION);
                 mCurrentAudioFilePath=GlobalContext.get().getFilesDir().getPath()+"/test_silent.wav";
+                showWavInfo("空音频",mCurrentAudioFilePath);
             }
         });
 
