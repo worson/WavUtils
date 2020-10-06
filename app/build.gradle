@@ -34,6 +34,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    api project(path: ':libwav')
+//    api project(path: ':libwav')
+    implementation 'com.github.worson:WavUtils:0.1'
     implementation 'com.github.worson:AwesomeLog:0.1'
 }
