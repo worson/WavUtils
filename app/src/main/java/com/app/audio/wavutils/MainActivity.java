@@ -13,8 +13,8 @@ import com.lib.audio.wav.WavUtil;
 import com.lib.common.androidbase.global.GlobalContext;
 import com.lib.common.androidbase.resource.AssetsUtil;
 import com.lib.common.androidbase.utils.ToastUtil;
-import com.lib.common.dlog.DLog;
 import com.lib.common.io.string.Strings;
+import com.worson.lib.log.L;
 import java.io.File;
 import java.io.IOException;
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 long cutDuration=WavUtil.cutWavTail(mWavFilePath,mCutWavFilePath,CUT_DURATION);
                 showWavInfo("裁剪后音频",mCutWavFilePath);
                 mCurrentAudioFilePath=mCutWavFilePath;
-                DLog.i(TAG, "onClick: cutWavTail "+cutDuration);
+                L.i(TAG, "onClick: cutWavTail "+cutDuration);
             }
         });
 
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 PcmUtil.toWav(mPcmFile.getAbsolutePath(),newFilePath,new WavHeader(16000,1,16));
                 showWavInfo("Pcm转换音频",newFilePath);
                 mCurrentAudioFilePath=newFilePath;
-                DLog.i(TAG, "onClick: pcm转换后的音频为 "+newFilePath);
+                L.i(TAG, "onClick: pcm转换后的音频为 "+newFilePath);
             }
         });
 
